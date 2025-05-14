@@ -1,18 +1,29 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import About from '../views/About.vue';
+import Blogs from '../views/Blogs.vue';
 
 // Define routes
 const routes = [
     {
-        path: '/home',         // URL path (i.e., http://home/)
-        name: 'Home',    // Route name
-        component: Home  // Maps the route to the component
+        path: '/',
+        name: 'Home',
+        component: Home
     },
     {
-        path: '/about',         // URL path (i.e., http://home/)
-        name: 'About',    // Route name
-        component: About  // Maps the route to the component
+        path: '/home',
+        name: 'Home',
+        component: Home
+    },
+    {
+        path: '/about',
+        name: 'About',
+        component: About
+    },
+    {
+        path: '/blogs',
+        name: 'Blogs',
+        component: Blogs
     }
 ];
 
