@@ -7,12 +7,12 @@ const newBlogName = ref("")
 const selectedBlog = ref(null)
 
 const fetchBlogs = async () => {
-    const res = await axios.get('http://localhost:8000/blogs/')
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/blogs/`)
     blogs.value = res.data
 }
 
 const addBlog = async () => {
-    const res = await axios.post('http://localhost:8000/blogs/', {
+    const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/blogs/`, {
         name: newBlogName.value
     })
     blogs.value.push(res.data)
@@ -20,7 +20,7 @@ const addBlog = async () => {
 }
 
 const fetchOneBlog = async (id) => {
-    const res = await axios.get(`http://localhost:8000/blogs/${id}`)
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/blogs/${id}`)
     selectedBlog.value = res.data
 }
 
