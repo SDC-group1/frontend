@@ -1,8 +1,9 @@
 <template>
-    <nav> <!-- navigation links -->
-        <ul> <!-- unsigned list -->
-            <!-- list item -->
-            <li><router-link to="/blogs">Blogs</router-link></li>
+    <nav class="nav">
+        <ul>
+            <li>
+                <router-link to="/blogs" class="link" active-class="active">Blogs</router-link>
+            </li>
         </ul>
     </nav>
 </template>
@@ -10,32 +11,44 @@
 <script>
 export default {
     name: 'NavBar'
-};
+}
 </script>
-
-<style>
-nav {
-    background-color: #f8f9fa;
-    padding: 1rem;
+  
+<style scoped>
+.nav {
+    background-color: #121212;
+    padding: 1rem 2rem;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid #2a2a2a;
 }
 
-nav ul {
-    list-style-type: none;
-    padding: 0;
+ul {
     display: flex;
-    gap: 1rem;
+    list-style: none;
+    gap: 1.2rem;
+    margin: 0;
+    padding: 0;
 }
 
-nav ul li {
-    display: inline;
-}
-
-nav ul li a {
+.link {
+    padding: 0.4rem 1.2rem;
+    border-radius: 9999px;
+    background-color: transparent;
+    color: #aaa;
+    font-weight: 500;
     text-decoration: none;
-    color: #007bff;
+    transition: background 0.2s, color 0.2s;
 }
 
-nav ul li a:hover {
-    text-decoration: underline;
+.link:hover {
+    background-color: #2a2a2a;
+    color: #fff;
+}
+
+.active {
+    background-color: #ffffff10;
+    color: #fff;
+    font-weight: 600;
 }
 </style>
+  
