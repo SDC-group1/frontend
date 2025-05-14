@@ -2,8 +2,7 @@
     <nav> <!-- navigation links -->
         <ul> <!-- unsigned list -->
             <!-- list item -->
-            <li><router-link to="/about">About</router-link></li>
-            <li><router-link to="/home">Home</router-link></li>
+            <li><router-link to="/blogs">Blogs</router-link></li>
         </ul>
     </nav>
 </template>
