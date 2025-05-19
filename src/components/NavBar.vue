@@ -3,14 +3,17 @@
         <ul>
             <li>
                 <router-link to="/blogs" class="link" active-class="active">Blogs</router-link>
+                <a class="link" active-class="active" @click="login">Login</a>
             </li>
         </ul>
     </nav>
 </template>
   
-<script>
-export default {
-    name: 'NavBar'
+<script setup>
+import axios from 'axios'
+
+const login = () => {
+  window.location.href = `${import.meta.env.VITE_BASE_URL}/api/auth/login?c=${window.location.origin}/auth`
 }
 </script>
   
@@ -22,12 +25,20 @@ export default {
     border-bottom: 1px solid #2a2a2a;
 }
 
+.nav li {
+    gap: 10px
+}
+
 ul {
     display: flex;
     list-style: none;
     gap: 1.2rem;
     margin: 0;
     padding: 0;
+}
+
+button { 
+
 }
 
 .link {

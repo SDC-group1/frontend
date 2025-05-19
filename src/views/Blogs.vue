@@ -6,6 +6,12 @@ const posts = ref([])
 const newPost = ref({ title: '', content: '' })
 const currentPage = ref(1)
 const pageSize = 5
+function getAccessTokenFromCookie() {
+  const match = document.cookie.match(/(^| )access_token=([^;]+)/)
+  return match ? match[2] : null
+}
+
+const token = getAccessTokenFromCookie()
 
 const fetchPosts = async () => {
     const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/posts`)
@@ -14,7 +20,11 @@ const fetchPosts = async () => {
 
 const addPost = async () => {
     try {
-        await axios.post(`${import.meta.env.VITE_BASE_URL}/api/posts`, newPost.value)
+        await axios.post(`${import.meta.env.VITE_BASE_URL}/api/posts`, newPost.value, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
         await fetchPosts()
         newPost.value = { title: '', content: '' }
     } catch (err) {
