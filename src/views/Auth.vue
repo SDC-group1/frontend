@@ -10,8 +10,7 @@ onMounted(() => {
 
   if (accessToken) {
     document.cookie = `access_token=${accessToken}; path=/`
-
-    router.push('/')
   }
+  router.push('/')
 })
 </script>

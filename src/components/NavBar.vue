@@ -3,18 +3,39 @@
         <ul>
             <li>
                 <router-link to="/blogs" class="link" active-class="active">Blogs</router-link>
-                <a class="link" active-class="active" @click="login">Login</a>
+                <a v-if="!hasAccessToken" class="link" @click="login">Login</a>
+                <a v-else class="link" @click="logout">Logout</a>
             </li>
         </ul>
     </nav>
 </template>
   
 <script setup>
-import axios from 'axios'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const hasAccessToken = ref(false)
+
+function updateAccessTokenState() {
+  hasAccessToken.value = document.cookie.split('; ').some(cookie =>
+    cookie.startsWith('access_token=')
+  )
+}
 
 const login = () => {
   window.location.href = `${import.meta.env.VITE_BASE_URL}/api/auth/login?c=${window.location.origin}/auth`
 }
+
+const logout = () => {
+  document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
+  updateAccessTokenState()
+  router.push("/")
+}
+
+onMounted(() => {
+  updateAccessTokenState()
+})
 </script>
   
 <style scoped>

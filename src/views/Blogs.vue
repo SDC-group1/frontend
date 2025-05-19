@@ -28,7 +28,19 @@ const addPost = async () => {
         await fetchPosts()
         newPost.value = { title: '', content: '' }
     } catch (err) {
-        console.error("新增失敗", err.response?.data || err.message)
+        if (err.response) {
+            const status = err.response.status
+            console.error(`新增失敗，狀態碼：${status}`, err.response.data)
+
+            if (status === 401) {
+            alert('未授權，請重新登入')
+            } else if (status === 400) {
+            alert('請確認輸入內容正確')
+            }
+        } else {
+            console.error("發生非 HTTP 錯誤", err.message)
+            alert("請求失敗，請稍後再試")
+        }
     }
 }
 
