@@ -6,6 +6,9 @@ const posts = ref([])
 const newPost = ref({ title: '', content: '' })
 const currentPage = ref(1)
 const pageSize = 5
+const searchKeyword = ref('') 
+const isSearching = ref(false) 
+
 function getAccessTokenFromCookie() {
   const match = document.cookie.match(/(^| )access_token=([^;]+)/)
   return match ? match[2] : null
@@ -52,11 +55,46 @@ const paginatedPosts = computed(() => {
 
 const totalPages = computed(() => Math.ceil(posts.value.length / pageSize))
 
+const searchPosts = async() => {
+    if(!searchKeyword.value.trim()){
+        await fetchPosts() // revert to full list if no keyword
+        return
+    }
+    try {
+        const response = await axios.get('${import.meta.env.VITE_BASE_UTL}/api/posts/search', 
+            {params: { keyword: searchKeyword.value }})
+        posts.value = response.data
+        isSearching.value = true
+        currentPage.value = 1
+    } catch (error) {
+        console.error('搜尋失敗', error)
+        alert('搜尋失敗，請稍後再試')
+        }
+}
+
+const clearSearch = async() => {
+    searchKeyword.value = ''
+    await fetchPosts() // revert to full list
+    isSearching.value = false
+}
+
 onMounted(fetchPosts)
 </script>
 
 <template>
     <div class="container no-navbar">
+        <div class="search-section">
+            <h3 class="center">🔍 搜尋內容</h3>
+            <div class="input-wrapper">
+                <input v-model="searchKeyword" placeholder="輸入關鍵字" @keyup.enter="searchPosts" />
+            </div>
+            <div class="search-buttons">
+                <button @click="searchPosts">搜尋</button>
+                <button @click="clearSearch" v-if="isSearching">清除搜尋</button>
+            </div>
+        </div>
+
+
         <div class="add-post">
             <h3 class="center">✏️ 發表一則新內容</h3>
             <div class="input-wrapper">
@@ -82,6 +120,9 @@ onMounted(fetchPosts)
         </div>
 
         <div class="post-list">
+            <div v-if="paginatedPosts.length === 0" class="center">
+                <p> {{ isSearching ? '無符合關鍵字的文章' : '目前沒有文章' }}</p>
+            </div>
             <div class="post-card" v-for="post in paginatedPosts" :key="post.id">
                 <h3 class="center">{{ post.title }}</h3>
                 <p class="center">{{ post.content?.slice(0, 100) || '' }}...</p>
@@ -90,6 +131,7 @@ onMounted(fetchPosts)
                 </small>
             </div>
         </div>
+
 
         <div class="pagination">
             <button @click="currentPage--" :disabled="currentPage === 1">⬅</button>
@@ -124,7 +166,8 @@ body,
     text-align: center;
 }
 
-.add-post {
+.add-post,
+.search-section {
     background-color: #1e1e1e;
     padding: 16px;
     border-radius: 16px;
@@ -140,7 +183,8 @@ body,
 }
 
 .add-post input,
-.add-post textarea {
+.add-post textarea,
+.search-section input {
     width: 100%;
     padding: 12px;
     border: none;
@@ -169,6 +213,12 @@ button:hover {
 button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.search-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
 }
 
 .preview {
